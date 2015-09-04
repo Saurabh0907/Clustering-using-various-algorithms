@@ -59,12 +59,12 @@ def getDistance(a, b):
     ret = reduce(lambda x,y: x + pow((a.coords[y]-b.coords[y]), 2),range(a.n),0.0)
     return math.sqrt(ret)
 
-x=0;
+x=-1;
 
-def makeRandomPoint(lower, upper):
+def makePoint(x_list, y_list):
     global x;
     x=x+1;
-    return Point([random.uniform(lower, upper), random.uniform(lower, upper)])
+    return Point([float(x_list[x]), float(y_list[x])]);
 
 def main():
     f = open('real_1.csv', 'rU');
@@ -74,12 +74,14 @@ def main():
     
     for line in f:
         cells = line.split(",");
-        x_list.append(float(cells[0]));
-        y_list.append(float(cells[1]));
-        
-    num_points, dim, k, cutoff, lower, upper = 250, 2, 5, 0.5, 0, 200
-    points = map( lambda i: makeRandomPoint(lower, upper), range(num_points) )
-    print points;
+        x_list.append(cells[0]);
+        y_list.append(cells[1]);
+    
+    x_list = x_list[1:];
+    y_list = y_list[1:];
+    num_points, k, cutoff = len(x_list), 5, 0.5
+    points = map( lambda i: makePoint(x_list, y_list), range(num_points) )
+    
     clusters = kmeans(points, k, cutoff)
     
     colors_arr = []
